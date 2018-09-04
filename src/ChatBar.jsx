@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 class ChatBar extends Component {
   render() {
     return (
-      <h1>Hello React :)</h1>
+      <footer className="chatbar">
+        <input className="chatbar-username" placeholder="Your Name (Optional)" />
+        <input className="chatbar-message" placeholder="Type a message and hit ENTER" />
+      </footer>
     );
   }
 }
