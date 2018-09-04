@@ -3,6 +3,11 @@ import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
 class App extends Component {
+  constructor(props) {
+    super(props) {
+      
+    }
+  }
   render() {
     return (
       <div>
