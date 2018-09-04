@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
+function randomId() {
+  return Math.floor(Math.random() * 10000000);
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -57,8 +61,14 @@ class App extends Component {
     let newMessage = {
       type: "incomingMessage",
       content: message.content,
-      username: message.userName
+      username: message.userName,
+      id: randomId()
     }
+    const oldMessages = this.state.messages;
+    const newMessages = [...oldMessages, newMessage];
+    this.setState({
+      messages: newMessages
+    });
   }
 
   componentDidMount() {
@@ -81,7 +91,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList messages={this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser}/>
+        <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage}/>
       </div>
     );
   }
