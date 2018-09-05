@@ -5,9 +5,8 @@ const uuidv4 = require('uuid/v4');
 class Message extends Component {
   render() {
     let messageInfo = this.props.messageInfo;
-    console.log(this.props);
     let htmlToDisplay = "";
-    if (messageInfo.type.includes("Notification")) {
+    if (messageInfo.type && messageInfo.type.includes("Notification")) {
       htmlToDisplay = 
       <div id={messageInfo.id} className="notification">
         <span className="notification-content">{messageInfo.content}</span>

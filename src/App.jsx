@@ -9,7 +9,8 @@ class App extends Component {
     this.state = {
       messages: [],
       currentUser: "New User",
-      connection: ""
+      connection: "",
+      numUsers: 0
     }
     this.addMessage = this.addMessage.bind(this);
     this.changeName = this.changeName.bind(this);
@@ -61,8 +62,8 @@ class App extends Component {
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
-      const newMessage = {type: "incomingMessage",id: 7, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
+      const newMessage = {type: "incomingMessage",id: uuidv4(), username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messages.concat(newMessage);
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
@@ -72,16 +73,21 @@ class App extends Component {
   render() {
     if(this.state.connection) {
       this.state.connection.onmessage = event => {
-        let data = JSON.parse(event.data);
-        this.setState((currentState) => {
-          return {messages: currentState.messages.concat(data)}; 
-        });
+          let data = JSON.parse(event.data);
+          this.setState((currentState) => {
+            if(typeof data !== "number") {
+              return {messages: currentState.messages.concat(data)}; 
+            } else {
+              return {numUsers: Number(event.data)}; 
+            }
+          });
       }
     }
     return (
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span>{this.state.numUsers} users online</span>
         </nav>
         <MessageList messages={this.state.messages}/>
         <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage} changeName={this.changeName}/>
