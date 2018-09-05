@@ -3,12 +3,18 @@ import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 const uuidv4 = require('uuid/v4');
 
+function assignRandomColor() {
+  const colors = ["#4286f4", "#e541f4", "#f44141", "#67f441"];
+  return colors[Math.floor(Math.random() * 3)];
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       messages: [],
       currentUser: "New User",
+      currentUserColor: assignRandomColor(),
       connection: "",
       numUsers: 0
     }
@@ -21,6 +27,7 @@ class App extends Component {
       type: "postMessage",
       content: message.content,
       username: message.userName,
+      currentUserColor: message.currentUserColor,
       id: uuidv4()
     }
 
@@ -59,15 +66,6 @@ class App extends Component {
     });
     console.log("Connected to the server");
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {type: "incomingMessage",id: uuidv4(), username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage);
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
   }
 
   render() {
@@ -89,8 +87,8 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
           <span className="numUsers">{this.state.numUsers} users online</span>
         </nav>
-        <MessageList messages={this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser} addMessage={this.addMessage} changeName={this.changeName}/>
+        <MessageList messages={this.state.messages} currentUser={this.state.currentUser} currentUserColor={this.state.currentUserColor}/>
+        <ChatBar currentUser={this.state.currentUser} currentUserColor={this.state.currentUserColor} addMessage={this.addMessage} changeName={this.changeName}/>
       </div>
     );
   }

@@ -11,7 +11,7 @@ class ChatBar extends Component {
 
     const onEnter = (event) => {
       if(event.key === 'Enter'){
-        const newMessage = {content: event.target.value, userName: this.props.currentUser};
+        const newMessage = {content: event.target.value, userName: this.props.currentUser, currentUserColor: this.props.currentUserColor};
         this.props.addMessage(newMessage);
         event.target.value = "";
       }
