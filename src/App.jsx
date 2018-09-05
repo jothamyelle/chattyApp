@@ -64,8 +64,6 @@ class App extends Component {
     this.setState({
       connection: newSocket
     });
-    console.log("Connected to the server");
-    console.log("componentDidMount <App />");
   }
 
   render() {
