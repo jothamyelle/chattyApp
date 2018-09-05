@@ -24,7 +24,16 @@ wss.on('connection', (ws) => {
     console.log('received: %s', message);
     wss.clients.forEach(function each(client) {
       if (client !== ws && client.readyState === SocketServer.OPEN) {
-        client.send(message);
+        let changeableMessage = JSON.parse(message);
+        switch(changeableMessage.type) {
+          case "postMessage":
+            changeableMessage.type = "incomingMessage";
+            break;
+          case "postNotification": 
+          changeableMessage.type = "incomingNotification";
+          break;
+        }
+        client.send(JSON.stringify(changeableMessage));
       }
     });
   });

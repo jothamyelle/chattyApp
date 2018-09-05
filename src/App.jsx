@@ -8,7 +8,7 @@ class App extends Component {
     super(props);
     this.state = {
       messages: [],
-      currentUser: "",
+      currentUser: "New User",
       connection: ""
     }
     this.addMessage = this.addMessage.bind(this);
@@ -17,6 +17,7 @@ class App extends Component {
 
   addMessage(message) {
     let newMessage = {
+      type: "postMessage",
       content: message.content,
       username: message.userName,
       id: uuidv4()
@@ -29,7 +30,22 @@ class App extends Component {
     this.state.connection.send(JSON.stringify(newMessage));
   }
 
+  addNotification(oldName, newName) {
+    let newNotification = {
+      type: "postNotification",
+      content: `${oldName} changed their name to ${newName}`,
+      id: uuidv4()
+    }
+
+    this.setState((prevState) => {
+      return {messages: prevState.messages.concat(newNotification)}
+    });
+    this.state.connection.send(JSON.stringify(newNotification));
+  }
+
   changeName(newName) {
+    let oldName = this.state.currentUser;
+    this.addNotification(oldName, newName);
     this.setState({
       currentUser: newName
     });
@@ -45,7 +61,7 @@ class App extends Component {
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
-      const newMessage = {id: 7, username: "Michelle", content: "Hello there!"};
+      const newMessage = {type: "incomingMessage",id: 7, username: "Michelle", content: "Hello there!"};
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
